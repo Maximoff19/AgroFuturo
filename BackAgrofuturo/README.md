@@ -1,4 +1,4 @@
-# Backend de Agrofuturo
+# Backend de Agrofuturo :)
 
 Este es el backend para la aplicación Agrofuturo, desarrollado con Python y FastAPI. El sistema implementa varios algoritmos para el análisis de datos agrícolas y expone una API REST para su consumo.
 
