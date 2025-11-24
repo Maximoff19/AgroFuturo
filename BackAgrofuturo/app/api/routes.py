@@ -53,6 +53,17 @@ async def run_floyd_warshall(request: FloydWarshallRequest):
         json_distances.setdefault(u, {})[v] = (dist if dist != float('inf') else -1)
     return FloydWarshallResponse(distances=json_distances)
 
+@router.post("/graph/bellman-ford", response_model=BellmanFordResponse) #bellman-ford
+async def run_bellman_ford(request: BellmanFordRequest):
+   
+    try:
+        distances = graphs.bellman_ford(request.graph.edges, request.start_node)
+        return BellmanFordResponse(distances=distances, has_negative_cycle=False)
+    except ValueError as e:
+        if "ciclo negativo" in str(e):
+            return BellmanFordResponse(distances={}, has_negative_cycle=True)
+        raise HTTPException(status_code=400, detail=str(e))
+
 @router.post("/clustering", response_model=ClusteringResponse)
 async def run_clustering(request: ClusteringRequest):
     result = clustering.k_means_clustering(request.data, request.n_clusters)
