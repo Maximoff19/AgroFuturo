@@ -100,3 +100,34 @@ def floyd_warshall(graph: Dict[Any, Dict[Any, float]], nodes: List[Any]) -> Dict
                     dist[(i, j)] = dist[(i, k)] + dist[(k, j)]
                     
     return dist
+
+def bellman_ford(graph: Dict[Any, Dict[Any, float]], start_node: Any) -> Dict[Any, float]: #bellman_ford
+    """
+    Algoritmo de Bellman-Ford para caminos más cortos con pesos negativos.
+    
+    Args:
+        graph: Diccionario de adyacencia {nodo: {vecino: peso}}
+        start_node: Nodo de inicio
+    Returns:
+        Diccionario de distancias más cortas desde start_node
+    Raises:
+        ValueError: Si detecta ciclos negativos
+    """
+    # Inicializar distancias
+    distances = {node: float('infinity') for node in graph}
+    distances[start_node] = 0
+    
+    # Relajar todas las aristas |V| - 1 veces
+    for _ in range(len(graph) - 1):
+        for u in graph:
+            for v, weight in graph[u].items():
+                if distances[u] + weight < distances[v]:
+                    distances[v] = distances[u] + weight
+    
+    # Verificar ciclos negativos
+    for u in graph:
+        for v, weight in graph[u].items():
+            if distances[u] + weight < distances[v]:
+                raise ValueError("El grafo contiene un ciclo negativo")
+    
+    return distances
