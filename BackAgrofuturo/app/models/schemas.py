@@ -43,6 +43,14 @@ class FloydWarshallRequest(BaseModel):
 class FloydWarshallResponse(BaseModel):
     distances: Dict[str, Dict[str, float]] # claves de tupla convertidas a string para compatibilidad JSON
 
+class BellmanFordRequest(BaseModel): #BellmanFord
+    graph: GraphData
+    start_node: str
+
+class BellmanFordResponse(BaseModel):
+    distances: Dict[str, float]
+    has_negative_cycle: bool = False
+    
 # Modelos de Clustering
 class ClusteringRequest(BaseModel):
     data: List[List[float]]
