@@ -36,6 +36,28 @@ def test_dijkstra():
     assert distances["B"] == 1.0
     assert distances["C"] == 3.0
 
+def test_bellman_ford(): #test bellman_ford
+    graph_data = {
+        "nodes": ["A", "B", "C", "D"],
+        "edges": {
+            "A": {"B": 5, "C": 8},
+            "B": {"C": 3, "D": 4},
+            "C": {"D": 2},
+            "D": {}
+        }
+    }
+    response = client.post("/api/v1/graph/bellman-ford", json={
+        "graph": graph_data, 
+        "start_node": "A"
+    })
+    assert response.status_code == 200
+    distances = response.json()["distances"]
+    assert distances["A"] == 0
+    assert distances["B"] == 5
+    assert distances["C"] == 8
+    assert distances["D"] == 9
+    assert response.json()["has_negative_cycle"] is False
+
 def test_clustering():
     data = [[1.0, 1.0], [1.5, 1.5], [10.0, 10.0], [10.5, 10.5]]
     response = client.post("/api/v1/clustering", json={"data": data, "n_clusters": 2})
